@@ -3,7 +3,8 @@
 var path = require('path'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     ComponentPlugin = require('component-webpack-plugin'),
-    WebpackConfig = require('webpack-config');
+    WebpackConfig = require('webpack-config'),
+    HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = new WebpackConfig().merge({
     output: {
@@ -20,7 +21,11 @@ module.exports = new WebpackConfig().merge({
     },
     plugins: [
         new ComponentPlugin(),
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].css'),
+        new HtmlWebpackPlugin({
+            inject: true,
+            template: 'src/index.html'
+        })
     ],
     module: {
         loaders: [{
