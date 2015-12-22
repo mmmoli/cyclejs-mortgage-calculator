@@ -1,0 +1,39 @@
+{
+  "name": "cycle-through",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Example of a cycle.js app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Cycle.js",
+    "RxJS"
+  ],
+  "author": "MIchele Memoli <michele@100shapes.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@cycle/core": "^6.0.0",
+    "@cycle/dom": "^8.0.0",
+    "rx": "^4.0.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.21",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "^1.1.1",
+    "component-webpack-plugin": "^0.2.1",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "file-loader": "^0.8.5",
+    "less": "^2.5.3",
+    "less-loader": "^2.2.2",
+    "react-transform-catch-errors": "^1.0.0",
+    "react-transform-hmr": "^1.0.1",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9",
+    "webpack-config": "^3.0.0",
+    "webpack-dev-server": "^1.14.0"
+  }
+}
