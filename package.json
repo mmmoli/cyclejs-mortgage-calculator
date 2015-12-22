@@ -5,7 +5,8 @@
   "description": "Example of a cycle.js app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=dev webpack-dev-server"
   },
   "keywords": [
     "Cycle.js",

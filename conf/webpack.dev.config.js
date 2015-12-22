@@ -29,5 +29,14 @@ module.exports = new WebpackConfig().extend('./conf/webpack.base.config.js').mer
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
-    ]
+    ],
+    devServer: {
+        contentBase: './public',
+        stats: {
+            modules: false,
+            cached: false,
+            colors: true,
+            chunk: false
+        }
+    }
 });
