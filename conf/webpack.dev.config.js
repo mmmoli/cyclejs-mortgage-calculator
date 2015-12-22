@@ -14,6 +14,7 @@ module.exports = new WebpackConfig().extend('./conf/webpack.base.config.js').mer
         chunkFilename: '[name].bundle.js'
     },
     entry: {
+        app: './src/main.js',
         vendor: [
             //'consolelog',
             //'es5-shim',
