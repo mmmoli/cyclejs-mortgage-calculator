@@ -1,4 +1,4 @@
-import {div, input, p} from '@cycle/dom';
+import {div, input, p, h} from '@cycle/dom';
 import {compose} from 'ramda';
 
 const intent = (sources) => {
@@ -32,6 +32,7 @@ const view = (state) => {
 
     return isChecked$.map(isChecked =>
         div([
+            h('label', 'Toggle me'),
             input({type: 'checkbox'}, `Toggle me`),
             p(isChecked ? 'ON' : 'off')
         ])
