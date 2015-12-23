@@ -1,53 +1,15 @@
 import Cycle from '@cycle/core';
-import {makeDOMDriver, div, input, p} from '@cycle/dom';
-import {compose} from 'ramda';
+import {makeDOMDriver} from '@cycle/dom';
 
-const intent = (sources) => {
+import Checker from './Components/Checker';
 
-    const toggles$ = sources.DOM
-        .select('input')
-        .events('change')
-        .map(ev => ev.target.checked)
-        .startWith(false);
+const Main = (sources) => {
 
     return {
-        toggles$
-    };
-
-};
-
-const model = (actions) => {
-
-    const isChecked$ = actions.toggles$.map((isChecked) =>
-        isChecked
-    );
-
-    return {
-        isChecked$
+        DOM: Checker(sources).DOM
     };
 };
 
-const view = (state) => {
-
-    const {isChecked$} = state;
-
-    return isChecked$.map(isChecked =>
-        div([
-            input({type: 'checkbox'}, `Toggle me`),
-            p(isChecked ? 'ON' : 'off')
-        ])
-    );
-};
-
-const main = (sources) => {
-
-    const makeDOM = compose(view, model, intent);
-
-    return {
-        DOM: makeDOM(sources)
-    };
-};
-
-Cycle.run(main, {
+Cycle.run(Main, {
     DOM: makeDOMDriver('#app')
 });
