@@ -29,6 +29,11 @@ module.exports = new WebpackConfig().merge({
         })
     ],
     module: {
+        preLoaders: [{
+            test: /\.jsx?$/,
+            loader: 'eslint-loader',
+            exclude: /node_modules/
+        }],
         loaders: [{
             test: /\.css$/,
             exclude: /.*\.min.css/,

@@ -18,7 +18,8 @@ module.exports = new WebpackConfig().extend('./conf/webpack.base.config.js').mer
         vendor: [
             'rx',
             '@cycle/core',
-            '@cycle/dom'
+            '@cycle/dom',
+            'ramda'
         ]
     },
     plugins: [
