@@ -1,50 +1,35 @@
 import {div, input, p, h} from '@cycle/dom';
-import {compose} from 'ramda';
+import {Observable} from 'rx';
 
-const intent = (sources) => {
+const Checker = (sources) => {
 
+    // Intent
     const toggles$ = sources.DOM
         .select('input')
         .events('change')
         .map(ev => ev.target.checked)
         .startWith(false);
 
-    return {
-        toggles$
-    };
-
-};
-
-const model = (actions) => {
-
-    const isChecked$ = actions.toggles$.map((isChecked) =>
+    // Model
+    const isChecked$ = toggles$.map(isChecked =>
         isChecked
     );
 
-    return {
-        isChecked$
-    };
-};
-
-const view = (state) => {
-
-    const {isChecked$} = state;
-
-    return isChecked$.map(isChecked =>
-        div([
-            h('label', 'Toggle me'),
-            input({type: 'checkbox'}, `Toggle me`),
-            p(isChecked ? 'ON' : 'off')
-        ])
+    // View
+    const DOM = Observable.combineLatest(
+        sources.props$,
+        isChecked$,
+        (props, isChecked) =>
+            div([
+                h('label', props.label),
+                input({type: 'checkbox'}, `Toggle me`),
+                p(isChecked ? 'ON' : 'off')
+            ])
     );
-};
-
-const Checker = (sources) => {
-
-    const makeDOM = compose(view, model, intent);
 
     return {
-        DOM: makeDOM(sources)
+        DOM,
+        isChecked$
     };
 };
 
