@@ -19,6 +19,7 @@ module.exports = new WebpackConfig().extend('./conf/webpack.base.config.js').mer
             'rx',
             '@cycle/core',
             '@cycle/dom',
+            '@cycle/isolate',
             'ramda'
         ]
     },

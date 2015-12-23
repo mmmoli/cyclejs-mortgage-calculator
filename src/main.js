@@ -1,29 +1,55 @@
 import Cycle from '@cycle/core';
 import {Observable} from 'rx';
-import {makeDOMDriver, div} from '@cycle/dom';
+import {makeDOMDriver, p, div} from '@cycle/dom';
+import isolate from '@cycle/isolate';
 
 import Checker from './Components/Checker';
 
 const Main = (sources) => {
 
-    const props$ = Observable.of({
-        label: 'Mega toggle'
-    });
+    const CheckerHappy = isolate(Checker, 'happy');
+    const CheckerSleepy = isolate(Checker, 'sleepy');
 
-    const checker = Checker({
+    const checkerHappy = CheckerHappy({
         DOM: sources.DOM,
-        props$
+        props$: Observable.of({
+            label: 'Happy?'
+        })
     });
 
-    const isChecked$ = checker.isChecked$;
-    const checkerVTree$ = checker.DOM;
+    const checkerSleepy = CheckerSleepy({
+        DOM: sources.DOM,
+        props$: Observable.of({
+            label: 'Sleepy?'
+        })
+    });
 
-    const vtree$ = checkerVTree$.withLatestFrom(isChecked$, (checkerVTree, isChecked) =>
-        div([
-            checkerVTree,
-            div(`Checked? ${isChecked}`)
-        ])
-    );
+    const ishappy$ = checkerHappy.isChecked$;
+    const isSleepy$ = checkerSleepy.isChecked$;
+
+    const checkerHappyVTree$ = checkerHappy.DOM;
+    const checkerSleepyVTree$ = checkerSleepy.DOM;
+
+    const state$ = Observable
+        .combineLatest(
+            ishappy$,
+            isSleepy$,
+            (isHappy, isSleepy) => {
+                return {isSleepy, isHappy};
+            }
+        );
+
+    const vtree$ = state$.withLatestFrom(
+        checkerHappyVTree$,
+        checkerSleepyVTree$,
+        (state, cHappy, cSleepy) => {
+            return div([
+                cHappy,
+                cSleepy,
+                p(`Happy? ${state.isHappy}`),
+                p(`Sleepy? ${state.isSleepy}`)
+            ]);
+        });
 
     return {
         DOM: vtree$
