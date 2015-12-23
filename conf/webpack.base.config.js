@@ -12,9 +12,10 @@ module.exports = new WebpackConfig().merge({
     },
     resolve: {
         root: [
-            __dirname,
-            path.join(__dirname, 'src', 'main', 'assets')
+            path.join(__dirname + '/../'),
+            path.join(__dirname, '/../src')
         ],
+        extensions: ['', '.js', '.jsx'],
         modulesDirectories: [
             'node_modules'
         ]
@@ -56,10 +57,13 @@ module.exports = new WebpackConfig().merge({
         }, {
             test: /\.svg$/,
             loader: 'file-loader?prefix=font/'
-        },  {
-            test: /\.js?x$/,
+        }, {
+            test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            query: {
+                presets: ['es2015', 'react']
+            }
         }
         ]
     }

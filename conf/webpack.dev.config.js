@@ -16,15 +16,9 @@ module.exports = new WebpackConfig().extend('./conf/webpack.base.config.js').mer
     entry: {
         app: './src/main.js',
         vendor: [
-            //'consolelog',
-            //'es5-shim',
-            //'es5-shim/es5-sham',
-            //'es6-shim',
-            //'es6-shim/es6-sham',
-            //'json3',
-            //'html5shiv',
-            //'html5shiv/dist/html5shiv-printshiv.js',
-            //'respond'
+            'rx',
+            '@cycle/core',
+            '@cycle/dom'
         ]
     },
     plugins: [
