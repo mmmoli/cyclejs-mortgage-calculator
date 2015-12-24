@@ -1,58 +1,35 @@
 import Cycle from '@cycle/core';
 import {Observable} from 'rx';
-import {makeDOMDriver, p, div} from '@cycle/dom';
+import {makeDOMDriver, div} from '@cycle/dom';
 import isolate from '@cycle/isolate';
 
-import Checker from './Components/Checker';
+import CurrencyField from './Components/CurrencyField';
 
 const Main = (sources) => {
 
-    const CheckerHappy = isolate(Checker, 'happy');
-    const CheckerSleepy = isolate(Checker, 'sleepy');
-
-    const checkerHappy = CheckerHappy({
+    const valueField = isolate(CurrencyField, 'value')({
         DOM: sources.DOM,
         props$: Observable.of({
-            label: 'Happy?'
+            label: 'Property Value',
+            initial: 400000
+        })
+    });
+    const depositField = isolate(CurrencyField, 'deposit')({
+        DOM: sources.DOM,
+        props$: Observable.of({
+            label: 'Deposit'
         })
     });
 
-    const checkerSleepy = CheckerSleepy({
-        DOM: sources.DOM,
-        props$: Observable.of({
-            label: 'Sleepy?'
-        })
-    });
-
-    const ishappy$ = checkerHappy.isChecked$;
-    const isSleepy$ = checkerSleepy.isChecked$;
-
-    const checkerHappyVTree$ = checkerHappy.DOM;
-    const checkerSleepyVTree$ = checkerSleepy.DOM;
-
-    const state$ = Observable
-        .combineLatest(
-            ishappy$,
-            isSleepy$,
-            (isHappy, isSleepy) => {
-                return {isSleepy, isHappy};
-            }
-        );
-
-    const vtree$ = state$.withLatestFrom(
-        checkerHappyVTree$,
-        checkerSleepyVTree$,
-        (state, cHappy, cSleepy) => {
-            return div([
-                cHappy,
-                cSleepy,
-                p(`Happy? ${state.isHappy}`),
-                p(`Sleepy? ${state.isSleepy}`)
-            ]);
-        });
+    const DOM = Observable.combineLatest(
+        valueField.DOM,
+        depositField.DOM,
+        (valueDOM, depositDOM) =>
+            div([valueDOM, depositDOM])
+    );
 
     return {
-        DOM: vtree$
+        DOM
     };
 };
 

@@ -63,7 +63,7 @@ module.exports = new WebpackConfig().merge({
             test: /\.svg$/,
             loader: 'file-loader?prefix=font/'
         }, {
-            test: /\.js$/,
+            test: /\.jsx?$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
             query: {

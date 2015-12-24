@@ -232,10 +232,6 @@
       2,
       120
     ],
-    "max-params": [
-      2,
-      3
-    ],
     // jsx rules
     "react/jsx-quotes": 0,
     "react/jsx-no-undef": 1,
