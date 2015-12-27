@@ -1,4 +1,4 @@
-import {compose, replace} from 'ramda';
+
 
 const digitsOnly = (input) => {
     return replace(/\D/g, '', input.toString());

@@ -1,4 +1,4 @@
-import currencyFormat from '../../helpers/currency_format';
+import {replace} from 'ramda';
 import {input, div, label} from '@cycle/dom';
 import {Observable} from 'rx';
 
@@ -11,17 +11,20 @@ const CurrencyField = (sources) => {
         .map(props => props.label)
         .startWith('label');
 
-    // Intent
     const input$ = sources.DOM
         .select('input')
-        .events('change');
+        .events('change')
+        .map(ev => ev.target.value);
 
-    const value$ = initialValue$.concat(
-        input$
-            .map(ev => ev.target.value)
-    );
+    const value$ = initialValue$
+        .concat(input$)
+        .map(value => {
+            const digits = replace(/\D/g, '', value.toString());
+            return parseInt(digits, 0);
+        });
 
-    const valueStr$ = value$.map(currencyFormat);
+    const valueStr$ = value$
+        .map(value => value.toLocaleString());
 
     const DOM = Observable.combineLatest(
         valueStr$,
@@ -39,6 +42,7 @@ const CurrencyField = (sources) => {
 
     return {
         DOM,
+        valueStr: valueStr$,
         value: value$
     };
 };

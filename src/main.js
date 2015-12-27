@@ -4,6 +4,7 @@ import {makeDOMDriver, div} from '@cycle/dom';
 import isolate from '@cycle/isolate';
 
 import CurrencyField from './Components/CurrencyField';
+import Percentage from './Components/Percentage';
 
 const Main = (sources) => {
 
@@ -20,12 +21,23 @@ const Main = (sources) => {
             label: 'Deposit'
         })
     });
+    const depositPercentage = isolate(Percentage, 'deposit-percentage')({
+        DOM: sources.DOM,
+        props$: Observable.combineLatest(
+            depositField.value,
+            valueField.value,
+            (numerator, denominator) => {
+                return {numerator, denominator};
+            }
+        )
+    });
 
     const DOM = Observable.combineLatest(
         valueField.DOM,
         depositField.DOM,
-        (valueDOM, depositDOM) =>
-            div([valueDOM, depositDOM])
+        depositPercentage.DOM,
+        (valueDOM, depositDOM, percentDOM) =>
+            div([valueDOM, depositDOM, percentDOM])
     );
 
     return {
