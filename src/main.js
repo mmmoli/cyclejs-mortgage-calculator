@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import Cycle from '@cycle/core';
 import {Observable} from 'rx';
 import {makeDOMDriver, div} from '@cycle/dom';
@@ -18,14 +19,15 @@ const Main = (sources) => {
     const depositField = isolate(CurrencyField, 'deposit')({
         DOM: sources.DOM,
         props$: Observable.of({
-            label: 'Deposit'
+            label: 'Deposit',
+            initial: 100000
         })
     });
     const depositPercentage = isolate(Percentage, 'deposit-percentage')({
         DOM: sources.DOM,
         props$: Observable.combineLatest(
-            depositField.value,
-            valueField.value,
+            depositField.value$,
+            valueField.value$,
             (numerator, denominator) => {
                 return {numerator, denominator};
             }

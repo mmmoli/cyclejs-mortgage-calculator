@@ -42,8 +42,8 @@ const CurrencyField = (sources) => {
 
     return {
         DOM,
-        valueStr: valueStr$,
-        value: value$
+        valueStr$,
+        value$
     };
 };
 
