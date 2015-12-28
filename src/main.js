@@ -5,7 +5,8 @@ import {makeDOMDriver, div} from '@cycle/dom';
 import isolate from '@cycle/isolate';
 
 import CurrencyField from './Components/CurrencyField';
-import Percentage from './Components/Percentage';
+//import Percentage from './Components/Percentage';
+import Slider from './Components/Slider';
 
 const Main = (sources) => {
 
@@ -16,30 +17,27 @@ const Main = (sources) => {
             initial: 400000
         })
     });
-    const depositField = isolate(CurrencyField, 'deposit')({
-        DOM: sources.DOM,
-        props$: Observable.of({
-            label: 'Deposit',
-            initial: 100000
-        })
+
+    const depositField = isolate(Slider, 'deposit')({
+        DOM: sources.DOM
     });
-    const depositPercentage = isolate(Percentage, 'deposit-percentage')({
-        DOM: sources.DOM,
-        props$: Observable.combineLatest(
-            depositField.value$,
-            valueField.value$,
-            (numerator, denominator) => {
-                return {numerator, denominator};
-            }
-        )
-    });
+
+    //const depositPercentage = isolate(Percentage, 'deposit-percentage')({
+    //    DOM: sources.DOM,
+    //    props$: Observable.combineLatest(
+    //        depositField.value$,
+    //        valueField.value$,
+    //        (numerator, denominator) => {
+    //            return {numerator, denominator};
+    //        }
+    //    )
+    //});
 
     const DOM = Observable.combineLatest(
         valueField.DOM,
         depositField.DOM,
-        depositPercentage.DOM,
-        (valueDOM, depositDOM, percentDOM) =>
-            div([valueDOM, depositDOM, percentDOM])
+        (valueDOM, depositDOM) =>
+            div([valueDOM, depositDOM])
     );
 
     return {
