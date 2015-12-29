@@ -11,16 +11,28 @@ const CurrencyField = (sources) => {
         .map(props => props.label)
         .startWith('label');
 
-    const input$ = sources.DOM
+    const text$ = sources.DOM
         .select('input')
-        .events('change')
-        .map(ev => ev.target.value);
+        .events('input')
+        .map(ev => ev.target.value || '0');
+
+    const input$ = sources.value$ ?
+        Observable
+            .merge(text$, sources.value$)
+            .distinctUntilChanged()
+        : text$;
 
     const value$ = initialValue$
         .concat(input$)
+        .map(textInput => {
+            const digits = replace(/\D/g, '', textInput.toString());
+            return parseInt(digits, 10);
+        })
         .map(value => {
-            const digits = replace(/\D/g, '', value.toString());
-            return parseInt(digits, 0);
+            if (sources.value$) {
+                sources.value$.onNext(value);
+            }
+            return value;
         });
 
     const valueStr$ = value$
