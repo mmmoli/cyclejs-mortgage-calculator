@@ -22,11 +22,9 @@ const Main = (sources) => {
         DOM: sources.DOM,
         props$: Observable.of({
             label: 'Deposit',
-            initial: 80
+            initial: 100000
         })
     });
-
-    depositField.value$.subscribe(x => console.log(x));
 
     const slider = isolate(Slider, 'fun-slider')({
         DOM: sources.DOM

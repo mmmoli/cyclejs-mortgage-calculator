@@ -6,9 +6,12 @@ import {Observable, BehaviorSubject} from 'rx';
 
 const CurrencyFieldWithSlider = (sources) => {
 
-    const TextInput = isolate(CurrencyField, 'currency-field');
+    const initialValue$ = sources.props$
+        .map(props => props.initial ? props.initial : 0);
 
-    const value$ = new BehaviorSubject(0);
+    const value$ = new BehaviorSubject(initialValue$.first());
+
+    const TextInput = isolate(CurrencyField, 'currency-field');
 
     const textInput = TextInput({
         DOM: sources.DOM,
