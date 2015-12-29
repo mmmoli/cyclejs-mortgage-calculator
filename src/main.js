@@ -1,8 +1,9 @@
 import 'babel-polyfill';
 import Cycle from '@cycle/core';
 import {Observable} from 'rx';
-import {makeDOMDriver, div} from '@cycle/dom';
+import {makeDOMDriver, div, h} from '@cycle/dom';
 import isolate from '@cycle/isolate';
+import './styles/main.less';
 
 import CurrencyField from './Components/CurrencyField';
 import Slider from './Components/Slider';
@@ -20,9 +21,12 @@ const Main = (sources) => {
 
     const depositField = isolate(CurrencyFieldWithSlider, 'deposit')({
         DOM: sources.DOM,
-        props$: Observable.of({
-            label: 'Deposit',
-            initial: 100000
+        props$: valueField.value$.map(max => {
+            return {
+                label: 'Deposit',
+                initial: 100000,
+                max
+            };
         })
     });
 
@@ -31,7 +35,8 @@ const Main = (sources) => {
         props$: Observable.of({
             label: 'Fake',
             initial: 500,
-            min: 80
+            min: 80,
+            max: 90
         })
     });
 
@@ -40,7 +45,12 @@ const Main = (sources) => {
         depositField.DOM,
         slider.DOM,
         (valueDOM, depositDOM, sliderDOM) =>
-            div([valueDOM, depositDOM, sliderDOM])
+            div({className: 'wrapper'}, [
+                h('h1', `Mortgage Calculator`),
+                valueDOM,
+                depositDOM,
+                sliderDOM
+            ])
     );
 
     return {

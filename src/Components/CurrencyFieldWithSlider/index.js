@@ -6,19 +6,19 @@ import {Observable, BehaviorSubject} from 'rx';
 
 const CurrencyFieldWithSlider = (sources) => {
 
+    // Initial values
     const initialValue$ = sources.props$
         .map(props => props.initial ? props.initial : 0);
 
     const value$ = new BehaviorSubject(initialValue$.first());
 
+    // Controls
     const TextInput = isolate(CurrencyField, 'currency-field');
-
     const textInput = TextInput({
         DOM: sources.DOM,
         props$: sources.props$,
         value$
     });
-
     const slider = isolate(Slider, 'slider-field')({
         DOM: sources.DOM,
         props$: sources.props$,
@@ -32,7 +32,6 @@ const CurrencyFieldWithSlider = (sources) => {
         value$,
         (textDOM, sliderDOM, value) =>
             div([
-                div(`yo`),
                 textDOM,
                 sliderDOM,
                 span(`master: ${value.toString()}`)

@@ -41,15 +41,23 @@ const CurrencyField = (sources) => {
     const DOM = Observable.combineLatest(
         valueStr$,
         label$,
-        (value, labelTxt) =>
+        (value, labelTxt) => {
 
-            div([
-                label(labelTxt),
+            const id = `${labelTxt}:${value}`;
+
+            return div({className: 'mb-'}, [
+                label({
+                    className: 'form-label',
+                    htmlFor: id
+                }, labelTxt),
                 input({
                     type: 'text',
+                    className: 'form-input',
+                    id,
                     value
                 })
             ])
+        }
     );
 
     return {

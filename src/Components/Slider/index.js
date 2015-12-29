@@ -9,6 +9,9 @@ const Slider = (sources) => {
     const min$ = sources.props$
         .map(props => props.min ? props.min : 0);
 
+    const max$ = sources.props$
+        .map(props => props.max ? props.max : 100);
+
     // Intent
     const sliderChanges$ = sources.DOM
         .select('input')
@@ -21,24 +24,39 @@ const Slider = (sources) => {
     const value$ = Observable
         .merge(sliderChanges$, input$)
         .distinctUntilChanged()
-        .map(value => {
-            const result = parseInt(value, 10);
-            if (sources.value$) {
-                sources.value$.onNext(result);
+        .map(value => parseInt(value, 0))
+        .combineLatest(
+            min$,
+            max$,
+            (value, min, max) => {
+
+                if ((value >= min) && (value <= max)) {
+                    return value;
+                } else if (value > max) {
+                    return max;
+                }
+                return min;
             }
-            return result;
+        )
+        .map(value => {
+            if (sources.value$) {
+                sources.value$.onNext(value);
+            }
+            return value;
         });
 
     // View
     const DOM = Observable
         .combineLatest(
             min$,
+            max$,
             value$,
-            (min, value) => {
+            (min, max, value) => {
                 return div([
                     input({
                         type: 'range',
                         min,
+                        max,
                         value
                     }),
                     span(value.toString())
