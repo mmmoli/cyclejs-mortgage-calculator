@@ -3,6 +3,12 @@ import {Observable} from 'rx';
 
 const Slider = (sources) => {
 
+    const initialValue$ = sources.props$
+        .map(props => props.initial ? props.initial : 0);
+
+    const min$ = sources.props$
+        .map(props => props.min ? props.min : 0);
+
     // Intent
     const sliderChanges$ = sources.DOM
         .select('input')
@@ -10,7 +16,7 @@ const Slider = (sources) => {
         .map(evt => evt.target.value);
 
     // Model
-    const input$ = sources.value$ ? sources.value$ : Observable.of(0);
+    const input$ = sources.value$ ? sources.value$ : initialValue$;
 
     const value$ = Observable
         .merge(sliderChanges$, input$)
@@ -24,15 +30,21 @@ const Slider = (sources) => {
         });
 
     // View
-    const DOM = value$.map(value => {
-        return div([
-            input({
-                type: 'range',
-                value
-            }),
-            span(value.toString())
-        ]);
-    });
+    const DOM = Observable
+        .combineLatest(
+            min$,
+            value$,
+            (min, value) => {
+                return div([
+                    input({
+                        type: 'range',
+                        min,
+                        value
+                    }),
+                    span(value.toString())
+                ]);
+            }
+        );
 
     return {
         DOM,

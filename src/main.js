@@ -27,7 +27,12 @@ const Main = (sources) => {
     });
 
     const slider = isolate(Slider, 'fun-slider')({
-        DOM: sources.DOM
+        DOM: sources.DOM,
+        props$: Observable.of({
+            label: 'Fake',
+            initial: 500,
+            min: 80
+        })
     });
 
     const DOM = Observable.combineLatest(
