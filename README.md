@@ -6,6 +6,6 @@
 1. Built this
 
 ## Instructions
-  
-  npm install
-  npm start
+
+    npm install
+    npm start
